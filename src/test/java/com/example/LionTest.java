@@ -24,6 +24,8 @@ public class LionTest {
         private final String sex;
         private final boolean hasMane;
 
+        private Feline feline;
+
         public LionTestWithParameters(String sex, boolean hasMane) {
             this.sex = sex;
             this.hasMane = hasMane;
@@ -39,7 +41,7 @@ public class LionTest {
 
         @Test
         public void doesHaveManeTest() throws Exception {
-            Lion lion = new Lion(sex);
+            Lion lion = new Lion(sex,feline);
             boolean isDoesHaveMane = lion.doesHaveMane();
             assertEquals(hasMane, isDoesHaveMane);
         }
@@ -52,9 +54,9 @@ public class LionTest {
         private Feline feline;
 
         @Test
-        public void getKittensTest() {
+        public void getKittensTest() throws Exception {
             Mockito.when(feline.getKittens()).thenReturn(1);
-            Lion lion = new Lion(feline);
+            Lion lion = new Lion("Самец", feline);
             int expectedKittens = 1;
             assertEquals(expectedKittens, lion.getKittens());
         }
@@ -63,7 +65,7 @@ public class LionTest {
         @Test
         public void doesHaveManeExceptionTest() {
             Exception exception = assertThrows(Exception.class, () -> {
-                new Lion("Не самец и не самка");
+                new Lion("Не самец и не самка",feline);
             });
             assertEquals("Используйте допустимые значения пола животного - самец или самка", exception.getMessage());
         }
@@ -72,7 +74,7 @@ public class LionTest {
         public void getFoodTest() throws Exception {
             List<String> food = List.of("Животные", "Птицы", "Рыба");
             Mockito.when(feline.getFood("Хищник")).thenReturn(food);
-            Lion lion = new Lion(feline);
+            Lion lion = new Lion("Самка", feline);
             assertEquals(food, lion.getFood());
         }
     }
